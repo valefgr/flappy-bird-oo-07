@@ -120,9 +120,12 @@ const obstaculos = {
 
   // 1. Agrega el método eliminar()
   eliminar: function (parObstaculos) {
-   // Agrega tu código aquí
-
-   
+    if (parObstaculos.left + obstaculos.width < 0) {
+      parObstaculos.bottomObstacle.remove();
+      parObstaculos.topObstacle.remove();
+      obstaculos.lista.shift();
+      console.log(obstaculos.lista.length);
+    }
   },
 
   mover: function () {
@@ -130,8 +133,7 @@ const obstaculos = {
       obstaculos.lista[i].left -= obstaculos.velocidad;
 
       // 2. Llama a obstaculos.eliminar(), proporcionando como argumento cada elemento de obstaculos.lista
-
-
+      obstaculos.eliminar(obstaculos.lista[i]);
     }
   },
 
