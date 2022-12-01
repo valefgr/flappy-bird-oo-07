@@ -71,7 +71,45 @@ const bird = {
     bird.bottom += 40;
   },
 
+  // 1. Agrega colisionY
+  colisionY: function (parObstaculos) {
+    if (
+      (bird.bottom < parObstaculos.bottomObstacleHeight &&
+        bird.bottom >= parObstaculos.bottomObstacleBottom) ||
+      (bird.bottom + bird.height > parObstaculos.topObstacleBottom &&
+        bird.bottom + bird.height <
+          parObstaculos.topObstacleBottom + parObstaculos.topObstacleHeight)
+    ) {
+      console.log("colisionY");
+      return true;
+    }
+  },
+
+  // 2. Agrega colisionX
+  colisionX: function (parObstaculos) {
+    if (
+      (bird.left + bird.width > parObstaculos.left &&
+        bird.left + bird.width <= parObstaculos.left + parObstaculos.width) ||
+      (bird.left > parObstaculos.left &&
+        bird.left < parObstaculos.left + parObstaculos.width)
+    ) {
+      console.log("colisionX");
+      return true;
+    }
+  },
+
   colision: function () {
+
+    // itera sobre obstaculos.lista. Si bird.colisionX y bird.colisionY son verdad:
+    // entonces llama a juego.termina() y agrega el id "colision" a topObstacle y bottomObstacle
+    obstaculos.lista.forEach((obs) => {
+      if (bird.colisionX(obs) && bird.colisionY(obs)) {
+        obs.topObstacle.setAttribute("id", "colision");
+        obs.bottomObstacle.setAttribute("id", "colision");
+        juego.terminar();
+      }
+    });
+
       if (bird.bottom < 0) {
         return true;
       }
@@ -118,7 +156,6 @@ const obstaculos = {
     obstaculos.lista.push(parObstaculos);
   },
 
-  // 1. Agrega el método eliminar()
   eliminar: function (parObstaculos) {
     if (parObstaculos.left + obstaculos.width < 0) {
       parObstaculos.bottomObstacle.remove();
@@ -132,7 +169,6 @@ const obstaculos = {
     for (var i = 0; i < obstaculos.lista.length; i++) {
       obstaculos.lista[i].left -= obstaculos.velocidad;
 
-      // 2. Llama a obstaculos.eliminar(), proporcionando como argumento cada elemento de obstaculos.lista
       obstaculos.eliminar(obstaculos.lista[i]);
     }
   },
